@@ -1,0 +1,27 @@
+name: Flutter Android Release
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter create --platforms=android --project-name=soko_mikopo --org=ke.sokomikopo .
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter build apk --release
+      - name: Publish APK release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: SokoMikopo Android v1.0.${{ github.run_number }}
+          files: build/app/outputs/flutter-apk/app-release.apk
+          make_latest: true

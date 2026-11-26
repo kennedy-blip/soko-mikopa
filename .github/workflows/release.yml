@@ -18,10 +18,12 @@ jobs:
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter build apk --release
+      - name: Name APK for the in-app download link
+        run: cp build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/SokoMikopo.apk
       - name: Publish APK release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
           name: SokoMikopo Android v1.0.${{ github.run_number }}
-          files: build/app/outputs/flutter-apk/app-release.apk
+          files: build/app/outputs/flutter-apk/SokoMikopo.apk
           make_latest: true
